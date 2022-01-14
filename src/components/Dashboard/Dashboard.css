@@ -1,0 +1,16 @@
+@media only screen and (max-width: 600px) {
+    #mobile-date-container {
+        display: block!important;
+    }
+    #desktop-date-container {
+        display: none!important;
+    }
+}
+
+#mobile-date-container {
+    display: none;
+}
+#desktop-date-container {
+    display: block;
+    margin-top: 0;
+}
