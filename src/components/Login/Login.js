@@ -120,9 +120,9 @@ function SignIn(props) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="/signup/" variant="body2">
+                <Button variant="text" onClick={()=>navigate('/signup')}>
                   Don't have an account?
-                </Link>
+                </Button>
               </Grid>
             </Grid>
 

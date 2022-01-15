@@ -19,7 +19,8 @@ from rest_framework import routers
 from hl_apps import views
 from quotes import views as quoteViews
 from django.views.generic import TemplateView
-
+from django.conf.urls.static import static
+from django.conf import settings
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -34,4 +35,4 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('auth/', include('auth.urls')),
     re_path('', TemplateView.as_view(template_name='index.html')),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

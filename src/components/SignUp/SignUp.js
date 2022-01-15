@@ -153,9 +153,9 @@ function SignIn(props) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="/login/" variant="body2">
-                  Already have an account? Sign in here.
-                </Link>
+              <Button variant="text" onClick={()=>navigate('/login')}>
+                  Already have an account? Log in here.
+                </Button>
               </Grid>
             </Grid>
 
