@@ -35,8 +35,9 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1:3000', 'localhost', '127.0.0.1:8000', 'hili-app.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1:3000', 'localhost', '127.0.0.1:8000', 'hili-app.herokuapp.com', '127.0.0.1:5000']
 
+SITE_ID = 1
 
 # Application definition
 

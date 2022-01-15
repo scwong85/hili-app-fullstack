@@ -4,6 +4,8 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, permissions, status
 from .serializers import UserSerializer, GroupSerializer
 
+from django.views import View
+import os
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -27,4 +29,15 @@ class GroupViewSet(viewsets.ModelViewSet):
 	serializer_class = GroupSerializer
 	permission_classes = [permissions.IsAuthenticated]
 
+
+class Assets(View):
+
+    def get(self, _request, filename):
+        path = os.path.join(os.path.dirname(__file__), 'static', filename)
+
+        if os.path.isfile(path):
+            with open(path, 'rb') as file:
+                return HttpResponse(file.read(), content_type='application/javascript')
+        else:
+            return HttpResponseNotFound()
 

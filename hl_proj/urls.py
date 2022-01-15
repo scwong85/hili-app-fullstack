@@ -30,7 +30,7 @@ router.register(r'quotesTags', quoteViews.QuoteTagsViewSet, 'quotes-tags')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(router.urls)),
+    path('modules/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('auth/', include('auth.urls')),
     re_path('', TemplateView.as_view(template_name='index.html')),

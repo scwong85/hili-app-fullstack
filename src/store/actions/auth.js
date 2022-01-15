@@ -72,7 +72,7 @@ export const authLogout = () => {
 export const authLogin = (username, password) => {
   return dispatch => {
     dispatch(authStart());
-    axios.post('http://127.0.0.1:8000/auth/login/', {
+    axios.post('/auth/login/', {
       username: username,
       password: password
     })
@@ -99,7 +99,7 @@ export const authLogin = (username, password) => {
 export const authSignup = (username, email, password, password2) => {
   return dispatch => {
     dispatch(authStart());
-    axios.post('http://127.0.0.1:8000/auth/register/', {
+    axios.post('/auth/register/', {
       username: username,
       email: email,
       password: password,
