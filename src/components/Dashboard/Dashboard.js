@@ -90,16 +90,22 @@ function Dashboard(props) {
       getQuotes()
         .then(res => {
           let tmpQuotesOrder = []
+          let data_ids = res.data.map((res_data) => {return parseInt(res_data.id)})
+
           getQuotesConfig()
             .then(quote_res => {
               if(quote_res.data.length === 1) {
                 setQuoteId(quote_res.data[0].id)
                 tmpQuotesOrder = quote_res.data[0].quote_order.split(',').map((qid) => {return parseInt(qid)})
+                let extra_ids = data_ids.filter(x => tmpQuotesOrder.indexOf(x)===-1) 
+                tmpQuotesOrder.push(...extra_ids)
                 setQuotesOrder(tmpQuotesOrder)
               } else if (quote_res.data.length > 1) {
                 let target_item = quote_res.data.filter((items) => { return (items.user === parseInt(props.user_id))})
                 setQuoteId(target_item[0].id)
                 tmpQuotesOrder = target_item[0].quote_order.split(',').map((qid) => {return parseInt(qid)})
+                let extra_ids = data_ids.filter(x => tmpQuotesOrder.indexOf(x)===-1)
+                tmpQuotesOrder.push(...extra_ids)
                 setQuotesOrder(tmpQuotesOrder)
               }
             })
