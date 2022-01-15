@@ -32,8 +32,7 @@ if os.path.isfile(dotenv_file):
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.str('DEBUG')
+
 
 ALLOWED_HOSTS = ['127.0.0.1:3000', 'localhost', '127.0.0.1:8000', 'hili-app.herokuapp.com', '127.0.0.1:5000']
 
