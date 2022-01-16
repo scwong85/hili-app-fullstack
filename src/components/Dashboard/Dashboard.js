@@ -145,7 +145,15 @@ function Dashboard(props) {
     let result = [];
 
     let tmpFilteredData = []
-    quotesOrder.forEach(qid => {
+
+    let tmpQuotesOrder = []
+    tmpQuotesOrder = quotesOrder.map((qid) => {return parseInt(qid)})
+    let data_ids = data.map((res_data) => {return parseInt(res_data.id)})
+    let extra_ids = data_ids.filter(x => tmpQuotesOrder.indexOf(x)===-1) 
+    tmpQuotesOrder.push(...extra_ids)
+
+
+    tmpQuotesOrder.forEach(qid => {
       data.forEach(element => {
         if(element.id === qid) {
           tmpFilteredData.push(element)
