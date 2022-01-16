@@ -82,7 +82,7 @@ function Dashboard(props) {
 
   useEffect(() => {
     if (!props.isAuthenticated) {
-      navigate('/login/');
+      navigate('/login');
     } else if (props.isAuthenticated) {
       console.log('try to get quotes')
       let token_data = getTokenUser(token)
