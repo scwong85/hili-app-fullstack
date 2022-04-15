@@ -1,3 +1,5 @@
+import './QuoteView.css';
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getSingleQuote } from "../../services/data.services";
@@ -20,10 +22,34 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Alert } from "@mui/material";
 
-import { deleteSingleQuote, saveSingleQuote, getQuotesTags, saveQuotesTags, patchQuotesTags } from "../../services/data.services";
+import { deleteSingleQuote, saveSingleQuote, getQuotesTags, saveQuotesTags, patchQuotesTags, getQuoteNER, getQuoteSentiment } from "../../services/data.services";
 
 import { Chip } from "@mui/material";
 import { Stack } from "@mui/material";
+
+const NER_Color = {
+  "PERSON": "#f2f2f3",
+  "NORP": "#7b8184",
+  "FACILITY": "#e5f4ff",
+  "FAC": "#0095ff",
+  "ORG": "#e5e8ff",
+  "GPE": "#0015ff",
+  "LOC": "#f0e5ff",
+  "PRODUCT": "#6a00ff",
+  "EVENT": "#fde5ff",
+  "WORK_OF_ART": "#ea00ff",
+  "LAW": "#ffe5f4",
+  "LANGUAGE": "#ff0095",
+  "DATE": "#ffe5e8",
+  "TIME": "#ff0015",
+  "PERCENT": '#fff0e5',
+  "MONEY": "#ff6a00",
+  "QUANTITY": "#fffde5",
+  "ORDINAL": '#ffea00',
+  "CARDINAL": "#f4ffe5",
+}
+
+
 
 function QuoteView(props) {
 
@@ -42,6 +68,8 @@ function QuoteView(props) {
   const [stateTag, setStateTag] = useState(''); // curent tag inserted in the text box
   const [allTags, setAllTags] = useState('') // all tags in all quotes
   const [allTagsId, setAllTagsId] = useState(0);
+
+  const [nerState, setNerState] = useState(false);
 
 
   const generateUserTags = () => {
@@ -174,6 +202,61 @@ function QuoteView(props) {
     inputProps: { 'aria-label': item },
   });
 
+  const addNERToQuote = () => {
+    getQuoteNER(qid)
+        .then(res => {
+          var ner_data = res.data;
+          var quote_data = data['quote'];
+          var quoteStr = document.getElementById("quote_textarea").innerHTML;
+          console.log(quoteStr)
+          for(var key in ner_data) {
+            var ner_tag = ner_data[key];
+            var ner_col = NER_Color[ner_tag];
+            var new_word = '<mark style="background-color:' + ner_col +   '">' + key + ' <b>' + ner_tag + '</b></mark>'
+            //console.log(key, ner_data[key])
+            quoteStr = quoteStr.replaceAll(key, new_word)
+            document.getElementById("quote_textarea").innerHTML = quoteStr;
+          }
+          setNerState(true);
+        })
+  }
+
+  const analyseSentiment = () => {
+    var quote_data = data['quote'];
+    document.getElementById("quote_textarea").innerHTML = quote_data;
+    getQuoteSentiment(qid)
+        .then(res => {
+          var sentiment_data = res.data.data;
+
+          var overall_score = res.data.overall
+          var quote_data = data['quote'];
+          var quoteStr = document.getElementById("quote_textarea").innerHTML;
+          console.log(quoteStr)
+          for(var sentence in sentiment_data) {
+            var sentence_score = parseFloat(sentiment_data[sentence]).toFixed(1);
+            var color_alpha = Math.abs(sentence_score)
+            if(sentence_score > 0) {
+              var color = "rgba(0, 255, 0, " + color_alpha + ")"
+            } else if (sentence_score < 0) {
+              var color = "rgba(255, 0, 0, " + color_alpha + ")"
+            } else {
+              var color = "rgba(0, 0, 0, 0)"
+            }
+            var new_sentence = '<mark style="background-color:' + color +   '">' + sentence + '</mark>'
+            //console.log(key, ner_data[key])
+            quoteStr = quoteStr.replaceAll(sentence, new_sentence)
+            document.getElementById("quote_textarea").innerHTML = quoteStr;
+          }
+          setNerState(false);
+        })
+  }
+
+  const clearNER = () => {
+    var quote_data = data['quote'];
+    document.getElementById("quote_textarea").innerHTML = quote_data;
+    setNerState(false);
+  }
+
   useEffect(() => {
     console.log('try to sign up')
     props.onTryAutoSignup();
@@ -240,8 +323,14 @@ function QuoteView(props) {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} lg={12}>
               
-              <Typography>{data.quote}</Typography>
+              <Typography id="quote_textarea">{data.quote}</Typography>
             </Grid> 
+            <Grid item xs={12} sm={12} lg={12}>
+              { nerState ? <Button variant="contained" onClick={clearNER}>Clear All Annotation</Button> : <Button variant="contained" onClick={addNERToQuote}>Annoted with NER</Button>  }
+            </Grid>
+            <Grid item xs={12} sm={12} lg={12}>
+              <Button variant="contained" onClick={analyseSentiment}>Sentiment Analysis</Button>
+            </Grid>
             <Grid item xs={12} sm={12} lg={12}>
               { generateUserTags() }
             </Grid>

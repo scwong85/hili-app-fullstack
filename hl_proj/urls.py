@@ -32,6 +32,9 @@ router.register(r'quotesTags', quoteViews.QuoteTagsViewSet, 'quotes-tags')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('modules/', include(router.urls)),
+    path('sentiment/quotes/<int:pk>/', quoteViews.QuoteSentimentDetail.as_view()),
+    path('ner/quotes/<int:pk>/', quoteViews.QuoteNERViewDetail.as_view()),
+    path('ner/quotes/', quoteViews.QuoteNERView.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('auth/', include('auth.urls')),
     re_path('', TemplateView.as_view(template_name='index.html')),

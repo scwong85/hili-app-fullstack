@@ -39,3 +39,11 @@ export const deleteSingleQuote = (qid) => {
 export const saveSingleQuote = (qid, payload) => {
   return api.put(`/modules/quotes/${qid}/`, payload)
 }
+
+export const getQuoteNER = (qid) => {
+  return api.get(`/ner/quotes/${qid}/`)
+}
+
+export const getQuoteSentiment = (qid) => {
+  return api.get(`/sentiment/quotes/${qid}/`)
+}
